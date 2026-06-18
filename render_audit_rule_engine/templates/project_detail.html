@@ -9,6 +9,7 @@
     <form method="post" action="{{ url_for('project_detail', project_id=project.id) }}" enctype="multipart/form-data">
       <input type="file" name="file" accept=".txt,.pdf,.doc,.docx" required>
       <p class="muted">支持 txt、pdf、docx。请选择文件后点击上传。</p>
+      <p class="muted">请上传具体项目资料，不要上传规则、制度、审查标准类文件。</p>
       <p><button type="submit">上传资料</button></p>
     </form>
   </div>

@@ -29,6 +29,19 @@ DEFAULT_RULEBOOK = Path(os.environ.get("RULEBOOK_PATH", DATA_DIR / "工程项目
 
 ALLOWED_RULE_EXT = {".xlsx"}
 ALLOWED_DOC_EXT = {".txt", ".pdf", ".docx", ".doc"}
+RULE_DOCUMENT_NAME_TERMS = ["规则", "制度", "办法", "指引", "指南", "标准", "清单", "规则库", "审查"]
+RULE_DOCUMENT_TEXT_TERMS = [
+    "公平竞争审查",
+    "审查规则",
+    "规则文件",
+    "规则库",
+    "适用范围",
+    "审查标准",
+    "审查要求",
+    "负面清单",
+    "不得设置",
+    "不得限定",
+]
 CORE_SHEETS = [
     "Rule_Master",
     "Decision_Master",
@@ -215,6 +228,14 @@ def extract_text(path):
                 chunks.append(page.extract_text() or "")
         return "\n".join(chunks)
     return f"文件名：{Path(path).name}"
+
+
+def looks_like_rule_document(filename, text):
+    name = Path(filename).stem
+    name_hits = sum(1 for term in RULE_DOCUMENT_NAME_TERMS if term in name)
+    text_sample = (text or "")[:5000]
+    text_hits = sum(1 for term in RULE_DOCUMENT_TEXT_TERMS if term in text_sample)
+    return "规则库" in name or "审查规则" in name or name_hits >= 2 or text_hits >= 3
 
 
 def keywords_from_text(text):
@@ -444,6 +465,13 @@ def project_detail(project_id):
         stored_path = UPLOAD_DIR / stored_name
         file.save(stored_path)
         text = extract_text(stored_path)
+        if looks_like_rule_document(original_name, text):
+            try:
+                stored_path.unlink()
+            except OSError:
+                pass
+            flash("该文件看起来是规则/制度/审查类文件，不应作为项目资料匹配。请上传具体项目资料，规则库请到“导入规则库”页面处理。", "error")
+            return redirect(url_for("project_detail", project_id=project_id))
         with db() as conn:
             conn.execute(
                 "INSERT INTO uploaded_files(project_id, original_name, stored_name, stored_path, text_content, uploaded_at) VALUES (?, ?, ?, ?, ?, ?)",
