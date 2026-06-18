@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}审计项目{% endblock %}
+{% block content %}
+<h2>审计项目</h2>
+<div class="panel">
+  <form method="post">
+    <label>项目名称</label>
+    <input type="text" name="name" placeholder="例如：XX工程招投标审计">
+    <label>项目说明</label>
+    <textarea name="description" placeholder="审计范围、项目背景、资料来源等"></textarea>
+    <button type="submit">新建审计项目</button>
+  </form>
+</div>
+
+<h3>项目列表</h3>
+<table>
+  <tr><th>ID</th><th>项目名称</th><th>说明</th><th>创建时间</th><th>操作</th></tr>
+  {% for p in projects %}
+  <tr>
+    <td>{{ p.id }}</td>
+    <td>{{ p.name }}</td>
+    <td>{{ p.description }}</td>
+    <td>{{ p.created_at }}</td>
+    <td><a class="btn light" href="{{ url_for('project_detail', project_id=p.id) }}">进入项目</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -20,7 +20,14 @@
     <td>{{ p.name }}</td>
     <td>{{ p.description }}</td>
     <td>{{ p.created_at }}</td>
-    <td><a class="btn light" href="{{ url_for('project_detail', project_id=p.id) }}">进入项目</a></td>
+    <td>
+      <div class="actions compact">
+        <a class="btn light" href="{{ url_for('project_detail', project_id=p.id) }}">进入项目</a>
+        <form method="post" action="{{ url_for('delete_project', project_id=p.id) }}" onsubmit="return confirm('确定删除该项目及其上传资料和风险结果吗？');">
+          <button class="danger" type="submit">删除</button>
+        </form>
+      </div>
+    </td>
   </tr>
   {% endfor %}
 </table>

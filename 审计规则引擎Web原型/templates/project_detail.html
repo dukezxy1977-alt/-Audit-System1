@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}项目详情{% endblock %}
+{% block content %}
+<h2>{{ project.name }}</h2>
+<p class="muted">{{ project.description }}</p>
+
+<div class="grid">
+  <div class="panel">
+    <h3>上传资料文件</h3>
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".txt,.pdf,.doc,.docx">
+      <p><button type="submit">上传资料</button></p>
+    </form>
+  </div>
+  <div class="panel">
+    <h3>规则匹配</h3>
+    <p class="muted">基于已上传资料文本，与 Rule_Master、Audit_Logic_Master、Evidence_Master 等表进行关键词匹配。</p>
+    <form method="post" action="{{ url_for('generate_project_risks', project_id=project.id) }}">
+      <button type="submit">生成风险清单</button>
+    </form>
+  </div>
+</div>
+
+<h3>已上传资料</h3>
+<table>
+  <tr><th>ID</th><th>文件名</th><th>上传时间</th><th>文本预览</th></tr>
+  {% for f in files %}
+  <tr>
+    <td>{{ f.id }}</td>
+    <td>{{ f.original_name }}</td>
+    <td>{{ f.uploaded_at }}</td>
+    <td>{{ (f.text_content or '')[:180] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>近期风险</h3>
+<div class="actions">
+  <a class="btn light" href="{{ url_for('risk_list', project_id=project.id) }}">风险清单</a>
+  <a class="btn light" href="{{ url_for('working_papers', project_id=project.id) }}">底稿草稿</a>
+  <a class="btn light" href="{{ url_for('reports', project_id=project.id) }}">报告段落</a>
+</div>
+<table>
+  <tr><th>规则编码</th><th>风险等级</th><th>分数</th><th>匹配词</th><th>审计发现</th></tr>
+  {% for r in risks %}
+  <tr>
+    <td>{{ r.rule_code }}</td><td>{{ r.risk_level }}</td><td>{{ r.score }}</td><td>{{ r.matched_terms }}</td><td>{{ r.finding }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

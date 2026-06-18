@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}规则表查看{% endblock %}
+{% block content %}
+<h2>规则表查看</h2>
+{% if not active_rulebook %}
+  <div class="panel">请先导入规则库。</div>
+{% else %}
+  <div class="grid">
+    {% for sheet in sheets %}
+    <div class="card">
+      <strong>{{ sheet.total }}</strong>
+      <span>{{ sheet.sheet_name }}</span>
+      <p><a class="btn light" href="{{ url_for('view_sheet', sheet_name=sheet.sheet_name) }}">查看</a></p>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}

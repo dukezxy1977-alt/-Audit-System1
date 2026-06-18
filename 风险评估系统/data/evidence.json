@@ -1,0 +1,12 @@
+[
+  {
+    "id": "c0670e1a1e034480b0cb57b1a15e3e23",
+    "created_at": "2026-06-18T02:12:36",
+    "rule_id": "BJ27",
+    "rule_name": "",
+    "filename": "证据测试.docx",
+    "conclusion": "不命中",
+    "note": "核查银行流水和合同台账，未发现行贿证据",
+    "checked_evidence": []
+  }
+]

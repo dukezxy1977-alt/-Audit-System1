@@ -29,6 +29,7 @@ textarea { min-height: 86px; resize: vertical; }
 button, .btn { display: inline-block; border: 0; background: var(--brand); color: white; padding: 9px 12px; border-radius: 4px; cursor: pointer; text-decoration: none; font-weight: 600; }
 button.secondary, .btn.secondary { background: var(--brand-2); }
 button.light, .btn.light { background: white; color: var(--brand); border: 1px solid var(--line); }
+button.danger, .btn.danger { background: var(--danger); }
 table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--line); }
 th, td { border: 1px solid var(--line); padding: 8px 9px; text-align: left; vertical-align: top; font-size: 13px; }
 th { background: #eaf0f6; color: #17324d; position: sticky; top: 0; z-index: 1; }
@@ -38,5 +39,7 @@ th { background: #eaf0f6; color: #17324d; position: sticky; top: 0; z-index: 1; 
 .flash.error { border-color: #f0a9a2; color: var(--danger); }
 .muted { color: var(--muted); }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 10px 0; }
+.actions.compact { margin: 0; }
+.actions form { margin: 0; }
 .pre { white-space: pre-wrap; background: #f8fafc; border: 1px solid var(--line); padding: 10px; border-radius: 4px; line-height: 1.5; }
 .badge { display: inline-block; padding: 2px 7px; border-radius: 99px; background: #eaf0f6; color: var(--brand); font-size: 12px; font-weight: 700; }

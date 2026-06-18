@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}风险清单{% endblock %}
+{% block content %}
+<h2>{{ project.name }} - 风险清单</h2>
+<div class="actions">
+  <a class="btn light" href="{{ url_for('project_detail', project_id=project.id) }}">返回项目</a>
+  <a class="btn light" href="{{ url_for('working_papers', project_id=project.id) }}">底稿草稿</a>
+  <a class="btn light" href="{{ url_for('reports', project_id=project.id) }}">报告段落</a>
+</div>
+<table>
+  <tr><th>规则编码</th><th>风险等级</th><th>分数</th><th>匹配词</th><th>法规依据</th><th>审计发现</th></tr>
+  {% for r in risks %}
+  <tr>
+    <td>{{ r.rule_code }}</td><td>{{ r.risk_level }}</td><td>{{ r.score }}</td><td>{{ r.matched_terms }}</td><td>{{ r.legal_basis }}</td><td>{{ r.finding }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

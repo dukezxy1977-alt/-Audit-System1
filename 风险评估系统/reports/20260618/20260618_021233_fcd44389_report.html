@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>招标风险评估报告</title>
+    <style>
+        * { margin: 0; padding: 0; }
+        body { font-family: '微软雅黑', Arial; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 30px; text-align: center; font-size: 28px; }
+        .header-info { display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 14px; color: #666; }
+        
+        .score-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 8px; margin-bottom: 30px; text-align: center; }
+        .score-value { font-size: 60px; font-weight: bold; margin: 20px 0; }
+        .score-label { font-size: 20px; margin-bottom: 10px; }
+        .score-desc { font-size: 14px; opacity: 0.9; }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: #f9f9f9; padding: 20px; border-radius: 6px; border-left: 4px solid #667eea; }
+        .stat-label { font-size: 12px; color: #999; margin-bottom: 8px; }
+        .stat-value { font-size: 24px; font-weight: bold; color: #333; }
+        
+        .findings-section { margin-bottom: 30px; }
+        .findings-section h2 { font-size: 18px; color: #333; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        
+        .risk-item { background: #f9f9f9; padding: 15px; margin-bottom: 15px; border-left: 4px solid #ccc; border-radius: 4px; }
+        .risk-item.level-a { border-left-color: #ff4444; }
+        .risk-item.level-b { border-left-color: #ff9800; }
+        .risk-item.level-c { border-left-color: #ffb74d; }
+        .risk-item.level-d { border-left-color: #4caf50; }
+        
+        .risk-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .risk-id { font-weight: bold; color: #333; }
+        .risk-level { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; color: white; }
+        .risk-level.a { background-color: #ff4444; }
+        .risk-level.b { background-color: #ff9800; }
+        .risk-level.c { background-color: #ffb74d; }
+        .risk-level.d { background-color: #4caf50; }
+        
+        .risk-name { font-size: 14px; color: #333; margin-bottom: 8px; }
+        .risk-desc { font-size: 12px; color: #666; margin-bottom: 8px; }
+        .risk-keywords { font-size: 12px; color: #999; }
+        .risk-location-list { font-size: 12px; color: #666; margin: 4px 0 0 18px; }
+        .risk-recommendation { background: white; padding: 10px; margin-top: 10px; border-left: 3px solid #667eea; }
+        .rec-label { font-size: 12px; color: #667eea; font-weight: bold; }
+        .rec-text { font-size: 12px; color: #333; margin-top: 5px; }
+        
+        .module-group { margin-bottom: 25px; }
+        .module-title { background: #f0f0f0; padding: 10px 15px; border-radius: 4px; font-weight: bold; color: #333; margin-bottom: 10px; }
+        
+        .footer { text-align: center; color: #999; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 招标投标风险评估报告</h1>
+        
+        <div class="header-info">
+            <div><strong>评估文件:</strong> /Users/zhangxinyu/Downloads/清水绿洲二期单元门厅墙面改造工程招标文件.pdf</div>
+            <div><strong>评估时间:</strong> 2026-06-18 02:12:36</div>
+            <div><strong>评估模型:</strong> v1.4（101 项规则）</div>
+        </div>
+        
+        <div class="score-section">
+            <div class="score-label">综合风险评分</div>
+            <div class="score-value">100/100</div>
+            <div class="score-label">低风险</div>
+            <div class="score-desc">
+                ✓ 风险较低，基本符合规范，继续监控
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">发现风险总数</div>
+                <div class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">A 级重大违规</div>
+                <div class="stat-value" style="color: #ff4444;">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">B 级严重违规</div>
+                <div class="stat-value" style="color: #ff9800;">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">高置信度发现</div>
+                <div class="stat-value" style="color: #667eea;">0</div>
+            </div>
+        </div>
+        
+        <div class="findings-section"><h2>🔍 详细风险发现</h2></div>
+        
+        <div class="footer">
+            <p>本报告由招标投标风险评估系统自动生成</p>
+            <p>仅供参考，具体风险判断请参考完整规则库进行人工复核</p>
+        </div>
+    </div>
+</body>
+</html>
+        

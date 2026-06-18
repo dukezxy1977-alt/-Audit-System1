@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}底稿草稿{% endblock %}
+{% block content %}
+<h2>{{ project.name }} - 审计底稿草稿</h2>
+<div class="actions">
+  <a class="btn light" href="{{ url_for('project_detail', project_id=project.id) }}">返回项目</a>
+  <a class="btn light" href="{{ url_for('risk_list', project_id=project.id) }}">风险清单</a>
+  <a class="btn light" href="{{ url_for('reports', project_id=project.id) }}">报告段落</a>
+</div>
+{% for r in risks %}
+<div class="panel">
+  <h3>规则 {{ r.rule_code }} <span class="badge">{{ r.risk_level }} / {{ r.score }}</span></h3>
+  <div class="pre">{{ r.working_paper_draft }}</div>
+</div>
+{% endfor %}
+{% endblock %}

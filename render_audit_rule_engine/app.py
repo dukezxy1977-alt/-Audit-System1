@@ -394,6 +394,33 @@ def projects():
     return render_template("projects.html", projects=items)
 
 
+@app.route("/projects/<int:project_id>/delete", methods=["POST"])
+def delete_project(project_id):
+    with db() as conn:
+        project = conn.execute("SELECT * FROM projects WHERE id=?", (project_id,)).fetchone()
+        if not project:
+            flash("项目不存在。", "error")
+            return redirect(url_for("projects"))
+
+        files = conn.execute("SELECT stored_path FROM uploaded_files WHERE project_id=?", (project_id,)).fetchall()
+        conn.execute("DELETE FROM risk_results WHERE project_id=?", (project_id,))
+        conn.execute("DELETE FROM uploaded_files WHERE project_id=?", (project_id,))
+        conn.execute("DELETE FROM projects WHERE id=?", (project_id,))
+
+    removed_files = 0
+    for item in files:
+        path = Path(item["stored_path"])
+        try:
+            if path.exists() and path.is_file():
+                path.unlink()
+                removed_files += 1
+        except OSError:
+            pass
+
+    flash(f"项目“{project['name']}”已删除，清理上传文件 {removed_files} 个。", "success")
+    return redirect(url_for("projects"))
+
+
 @app.route("/projects/<int:project_id>", methods=["GET", "POST"])
 def project_detail(project_id):
     with db() as conn:
