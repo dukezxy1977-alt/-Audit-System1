@@ -40,6 +40,6 @@ th { background: #eaf0f6; color: #17324d; position: sticky; top: 0; z-index: 1; 
 .muted { color: var(--muted); }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 10px 0; }
 .actions.compact { margin: 0; }
-.actions form { margin: 0; }
+.actions.compact form { margin: 0; }
 .pre { white-space: pre-wrap; background: #f8fafc; border: 1px solid var(--line); padding: 10px; border-radius: 4px; line-height: 1.5; }
 .badge { display: inline-block; padding: 2px 7px; border-radius: 99px; background: #eaf0f6; color: var(--brand); font-size: 12px; font-weight: 700; }

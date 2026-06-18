@@ -6,8 +6,8 @@
 <div class="grid">
   <div class="panel">
     <h3>上传资料文件</h3>
-    <form method="post" enctype="multipart/form-data">
-      <input type="file" name="file" accept=".txt,.pdf,.doc,.docx">
+    <form method="post" action="{{ url_for('project_detail', project_id=project.id) }}" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".txt,.pdf,.doc,.docx" required>
       <p><button type="submit">上传资料</button></p>
     </form>
   </div>
