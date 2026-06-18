@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = Path(os.environ.get("DATA_DIR", BASE_DIR / "data"))
 UPLOAD_DIR = Path(os.environ.get("UPLOAD_DIR", BASE_DIR / "uploads"))
 DB_PATH = Path(os.environ.get("DATABASE_PATH", DATA_DIR / "audit_engine.db"))
-DEFAULT_RULEBOOK = Path(os.environ.get("RULEBOOK_PATH", DATA_DIR / "工程项目招标投标审计规则引擎基础库_V10.xlsx"))
+BUNDLED_RULEBOOK = BASE_DIR / "data" / "工程项目招标投标审计规则引擎基础库_V10.xlsx"
+DEFAULT_RULEBOOK = Path(os.environ.get("RULEBOOK_PATH", BUNDLED_RULEBOOK))
 
 ALLOWED_RULE_EXT = {".xlsx"}
 ALLOWED_DOC_EXT = {".txt", ".pdf", ".docx", ".doc"}
@@ -141,6 +142,39 @@ def active_rulebook():
         return conn.execute("SELECT * FROM rulebooks WHERE active=1 ORDER BY id DESC LIMIT 1").fetchone()
 
 
+def bundled_rulebook_path():
+    if DEFAULT_RULEBOOK.exists():
+        return DEFAULT_RULEBOOK
+    return BUNDLED_RULEBOOK if BUNDLED_RULEBOOK.exists() else DEFAULT_RULEBOOK
+
+
+def excel_rule_count(xlsx_path, sheet_name="Rule_Master"):
+    path = Path(xlsx_path)
+    if not path.exists():
+        return 0
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    if sheet_name not in wb.sheetnames:
+        return 0
+    ws = wb[sheet_name]
+    return max(ws.max_row - 1, 0)
+
+
+def db_rule_count(rulebook_id, sheet_name="Rule_Master"):
+    with db() as conn:
+        return conn.execute(
+            "SELECT COUNT(*) FROM rule_rows WHERE rulebook_id=? AND sheet_name=?",
+            (rulebook_id, sheet_name),
+        ).fetchone()[0]
+
+
+def db_rule_code_count(rulebook_id, prefix):
+    with db() as conn:
+        return conn.execute(
+            "SELECT COUNT(*) FROM rule_rows WHERE rulebook_id=? AND sheet_name='Rule_Master' AND rule_code LIKE ?",
+            (rulebook_id, f"{prefix}%"),
+        ).fetchone()[0]
+
+
 def safe_cell(value):
     return "" if value is None else str(value).strip()
 
@@ -192,8 +226,28 @@ def import_rulebook(xlsx_path, name=None):
 
 def ensure_default_rulebook():
     init_db()
-    if active_rulebook() is None and DEFAULT_RULEBOOK.exists():
-        import_rulebook(DEFAULT_RULEBOOK, "工程项目招标投标审计规则引擎基础库_V10")
+    rulebook_path = bundled_rulebook_path()
+    if not rulebook_path.exists():
+        return
+
+    rb = active_rulebook()
+    if rb is None:
+        import_rulebook(rulebook_path, "工程项目招标投标审计规则引擎基础库_V10")
+        return
+
+    default_names = {DEFAULT_RULEBOOK.name, BUNDLED_RULEBOOK.name}
+    is_default_rulebook = rb["filename"] in default_names or rb["name"] == "工程项目招标投标审计规则引擎基础库_V10"
+    if not is_default_rulebook:
+        return
+
+    expected_rules = excel_rule_count(rulebook_path)
+    current_rules = db_rule_count(rb["id"])
+    if expected_rules and current_rules != expected_rules:
+        import_rulebook(rulebook_path, "工程项目招标投标审计规则引擎基础库_V10")
+        return
+
+    if db_rule_code_count(rb["id"], "JJCG-") == 0 and expected_rules >= 222:
+        import_rulebook(rulebook_path, "工程项目招标投标审计规则引擎基础库_V10")
 
 
 def sheet_rows(rulebook_id, sheet_name):
@@ -363,7 +417,7 @@ def index():
             "files": conn.execute("SELECT COUNT(*) FROM uploaded_files").fetchone()[0],
             "risks": conn.execute("SELECT COUNT(*) FROM risk_results").fetchone()[0],
         }
-    return render_template("index.html", stats=stats, default_rulebook=DEFAULT_RULEBOOK)
+    return render_template("index.html", stats=stats, default_rulebook=bundled_rulebook_path())
 
 
 @app.route("/import", methods=["GET", "POST"])
@@ -371,10 +425,11 @@ def import_rules():
     if request.method == "POST":
         action = request.form.get("action")
         if action == "default":
-            if not DEFAULT_RULEBOOK.exists():
+            rulebook_path = bundled_rulebook_path()
+            if not rulebook_path.exists():
                 flash("未找到默认 V10 Excel 文件，请上传规则库。", "error")
             else:
-                import_rulebook(DEFAULT_RULEBOOK, "工程项目招标投标审计规则引擎基础库_V10")
+                import_rulebook(rulebook_path, "工程项目招标投标审计规则引擎基础库_V10")
                 flash("默认 V10 规则库已导入并设为当前规则库。", "success")
             return redirect(url_for("import_rules"))
 
@@ -393,7 +448,7 @@ def import_rules():
 
     with db() as conn:
         rulebooks = conn.execute("SELECT * FROM rulebooks ORDER BY id DESC").fetchall()
-    return render_template("import_rules.html", rulebooks=rulebooks, default_rulebook=DEFAULT_RULEBOOK)
+    return render_template("import_rules.html", rulebooks=rulebooks, default_rulebook=bundled_rulebook_path())
 
 
 @app.route("/projects", methods=["GET", "POST"])
