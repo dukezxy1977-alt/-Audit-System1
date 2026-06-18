@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}工程项目招标投标审计规则引擎{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>工程项目招标投标审计规则引擎系统</h1>
+    <div class="status">当前规则库：{{ active_rulebook.name if active_rulebook else '未导入' }}</div>
+  </header>
+  <nav>
+    <a href="{{ url_for('index') }}">首页</a>
+    <a href="{{ url_for('import_rules') }}">导入规则库</a>
+    <a href="{{ url_for('projects') }}">审计项目</a>
+    <a href="{{ url_for('rules_index') }}">规则表查看</a>
+  </nav>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: audit-rule-engine
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    plan: free
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATA_DIR
+        value: /var/data
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: DATABASE_PATH
+        value: /var/data/audit_engine.db
+      - key: RULEBOOK_PATH
+        value: /var/data/工程项目招标投标审计规则引擎基础库_V10.xlsx
+    disk:
+      name: audit-rule-engine-data
+      mountPath: /var/data
+      sizeGB: 1
