@@ -6,9 +6,9 @@
 <div class="grid">
   <div class="panel">
     <h3>上传资料文件</h3>
-    <form method="post" action="{{ url_for('project_detail', project_id=project.id) }}" enctype="multipart/form-data">
-      <input type="file" name="file" accept=".txt,.pdf,.doc,.docx" required>
-      <p><button type="submit">上传资料</button></p>
+    <form id="upload-form" method="post" action="{{ url_for('project_detail', project_id=project.id) }}" enctype="multipart/form-data">
+      <input id="upload-file" type="file" name="file" accept=".txt,.pdf,.doc,.docx" required>
+      <p><button id="upload-button" type="submit">上传资料</button></p>
     </form>
   </div>
   <div class="panel">
@@ -42,4 +42,28 @@
   </tr>
   {% endfor %}
 </table>
+{% endblock %}
+{% block scripts %}
+<script>
+  const uploadForm = document.getElementById("upload-form");
+  const uploadFile = document.getElementById("upload-file");
+  const uploadButton = document.getElementById("upload-button");
+
+  if (uploadForm && uploadFile && uploadButton) {
+    uploadForm.addEventListener("submit", function (event) {
+      if (!uploadFile.files.length) {
+        event.preventDefault();
+        uploadFile.click();
+      }
+    });
+
+    uploadFile.addEventListener("change", function () {
+      if (uploadFile.files.length) {
+        uploadButton.textContent = "正在上传...";
+        uploadButton.disabled = true;
+        uploadForm.submit();
+      }
+    });
+  }
+</script>
 {% endblock %}
