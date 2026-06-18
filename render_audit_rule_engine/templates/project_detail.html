@@ -7,8 +7,9 @@
   <div class="panel">
     <h3>上传资料文件</h3>
     <form id="upload-form" method="post" action="{{ url_for('project_detail', project_id=project.id) }}" enctype="multipart/form-data">
-      <input id="upload-file" type="file" name="file" accept=".txt,.pdf,.doc,.docx" required>
-      <p><button id="upload-button" type="submit">上传资料</button></p>
+      <label class="btn file-picker" for="upload-file">选择资料并上传</label>
+      <input id="upload-file" class="visually-hidden-file" type="file" name="file" accept=".txt,.pdf,.doc,.docx">
+      <span id="upload-status" class="muted upload-status">支持 txt、pdf、docx</span>
     </form>
   </div>
   <div class="panel">
@@ -47,20 +48,12 @@
 <script>
   const uploadForm = document.getElementById("upload-form");
   const uploadFile = document.getElementById("upload-file");
-  const uploadButton = document.getElementById("upload-button");
+  const uploadStatus = document.getElementById("upload-status");
 
-  if (uploadForm && uploadFile && uploadButton) {
-    uploadForm.addEventListener("submit", function (event) {
-      if (!uploadFile.files.length) {
-        event.preventDefault();
-        uploadFile.click();
-      }
-    });
-
+  if (uploadForm && uploadFile && uploadStatus) {
     uploadFile.addEventListener("change", function () {
       if (uploadFile.files.length) {
-        uploadButton.textContent = "正在上传...";
-        uploadButton.disabled = true;
+        uploadStatus.textContent = "正在上传：" + uploadFile.files[0].name;
         uploadForm.submit();
       }
     });

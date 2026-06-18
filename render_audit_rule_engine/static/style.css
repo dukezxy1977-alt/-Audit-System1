@@ -30,6 +30,9 @@ button, .btn { display: inline-block; border: 0; background: var(--brand); color
 button.secondary, .btn.secondary { background: var(--brand-2); }
 button.light, .btn.light { background: white; color: var(--brand); border: 1px solid var(--line); }
 button.danger, .btn.danger { background: var(--danger); }
+.file-picker { margin-right: 8px; }
+.visually-hidden-file { position: absolute; left: -10000px; width: 1px; height: 1px; opacity: 0; }
+.upload-status { display: inline-block; margin-top: 8px; }
 table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--line); }
 th, td { border: 1px solid var(--line); padding: 8px 9px; text-align: left; vertical-align: top; font-size: 13px; }
 th { background: #eaf0f6; color: #17324d; position: sticky; top: 0; z-index: 1; }
